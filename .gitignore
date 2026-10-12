@@ -1,0 +1,25 @@
+# Company data never goes in the logic repo (see docs/data-repo.md)
+*.xlsx
+*.xlsm
+*.xls
+*.xlsb
+*.csv
+*.tsv
+*.parquet
+*.pdf
+*.qbo
+*.ofx
+*.fec
+*.sqlite
+*.db
+
+# Secrets
+.env
+.env.*
+!.env.example
+
+# OS and editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

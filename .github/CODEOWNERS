@@ -1,0 +1,9 @@
+# Who approves which area. Replace the handles with your team's GitHub usernames.
+# Requires a branch rule with "Require review from Code Owners" (GitHub Team on private repos).
+
+*                       @your-cfo
+/FINANCE.md             @your-cfo
+/RULES.md               @your-cfo
+/skills/month-end-close/ @your-controller
+/checks/                @your-controller
+/skills/variance-commentary/ @your-fpa-lead

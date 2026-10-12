@@ -1,0 +1,33 @@
+name: no-company-data
+
+# Fails a pull request that adds spreadsheets, data exports or secrets to the logic repo.
+# Company data belongs in the separate finance-data repo (see docs/data-repo.md).
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Block data files
+        run: |
+          found=$(git ls-files | grep -Ei '\.(xlsx|xlsm|xls|xlsb|csv|tsv|parquet|pdf|qbo|ofx|fec|sqlite|db)$' || true)
+          if [ -n "$found" ]; then
+            echo "::error::Data files do not belong in the logic repo:"
+            echo "$found"
+            exit 1
+          fi
+      - name: Block secrets
+        run: |
+          envs=$(git ls-files | grep -E '(^|/)\.env(\..+)?$' | grep -v '\.env\.example$' || true)
+          keys=$(git grep -nE '(sk-ant-[A-Za-z0-9_-]{20,}|sk-[A-Za-z0-9]{32,}|AKIA[0-9A-Z]{16}|-----BEGIN [A-Z ]*PRIVATE KEY-----)' -- . ':!.github/workflows/no-company-data.yml' || true)
+          if [ -n "$envs$keys" ]; then
+            echo "::error::Possible secrets found:"
+            echo "$envs"
+            echo "$keys"
+            exit 1
+          fi
